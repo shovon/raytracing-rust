@@ -16,9 +16,9 @@ impl Vec3 {
 
   pub fn sub(self, v: Vec3) -> Vec3 {
     return Vec3 {
-      e0: self.e0 - v.e1,
+      e0: self.e0 - v.e0,
       e1: self.e1 - v.e1,
-      e2: self.e2 - v.e1,
+      e2: self.e2 - v.e2,
     };
   }
 

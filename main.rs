@@ -1,7 +1,24 @@
 mod vec3;
 mod ray;
 
+fn hit_sphere(center: vec3::Vec3, radius: f32, r: ray::Ray) -> f32 {
+  let oc = r.origin().sub(center);
+  let a = r.direction().dot(r.direction());
+  let b = 2.0 * oc.dot(r.direction());
+  let c = oc.dot(oc) - radius * radius;
+  let discriminant = b*b - 4.0*a*c;
+  if discriminant < 0.0 {
+    return -1.0;
+  }
+  return (-b - discriminant.sqrt()) / (2.0*a);
+}
+
 fn color(r: ray::Ray) -> vec3::Vec3 {
+  let t = hit_sphere(vec3::Vec3{e0: 0.0, e1: 0.0, e2: -1.0}, 0.5, r);
+  if t > 0.0 {
+    let n = r.point_at_parameter(t).sub(vec3::Vec3{e0:0.0,e1:0.0,e2:-1.0});
+    return (vec3::Vec3{e0: n.e0+1.0, e1: n.e1+1.0, e2: n.e2+1.0}).scalar_mul(0.5);
+  }
   let unit_direction = r.direction().unit_vector();
   let t = 0.5 * (unit_direction.e1 + 1.0);
   let evec = vec3::Vec3{e0: 1.0, e1: 1.0, e2: 1.0};
