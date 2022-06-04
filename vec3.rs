@@ -49,4 +49,8 @@ impl Vec3 {
   pub fn length(self) -> f32 {
     return self.dot(self).sqrt();
   }
+
+  pub fn unit_vector(self) -> Vec3 {
+    return self.scalar_div(self.length());
+  }
 }
