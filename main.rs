@@ -1,3 +1,5 @@
+mod vec3;
+
 fn main() {
   let nx = 200;
   let ny = 100;
@@ -7,12 +9,14 @@ fn main() {
   
   for j in (0..ny).rev() {
     for i in 0..nx {
-      let r = (i as f32) / (nx as f32);
-      let g = (j as f32) / (ny as f32);
-      let b = 0.2;
-      let ir = (255.99 * r) as i16;
-      let ig = (255.99 * g) as i16;
-      let ib = (255.99 * b) as i16;
+      let col = vec3::Vec3 {
+        e0: (i as f32) / (nx as f32),
+        e1: (j as f32) / (ny as f32),
+        e2: 0.2,
+      };
+      let ir = (255.99 * col.e0) as i16;
+      let ig = (255.99 * col.e1) as i16;
+      let ib = (255.99 * col.e2) as i16;
       println!("{0} {1} {2}", ir, ig, ib);
     }
   }
