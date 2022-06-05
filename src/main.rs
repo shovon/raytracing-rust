@@ -84,6 +84,11 @@ fn main() {
     0.5,
     MaterialType::DialectricMat(Dialectric { ref_idx: 1.5 }),
   )));
+  list.push(Box::new(sphere::Sphere::new(
+    Vec3::new(-1.0, 0.0, -1.0),
+    -0.45,
+    MaterialType::DialectricMat(Dialectric { ref_idx: 1.5 }),
+  )));
 
   let mut world = HitableList { list: list };
 

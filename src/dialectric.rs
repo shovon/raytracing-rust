@@ -32,30 +32,33 @@ pub struct Dialectric {
 
 impl Material for Dialectric {
   fn scatter(self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3, scattered: &mut Ray) -> bool {
-    let outward_normal;
-    // let mut reflected = helpers::reflect(r_in.direction(), rec.normal);
+    let outward_normal: Vec3;
+    let reflected = helpers::reflect(r_in.direction(), rec.normal);
     let ni_over_nt: f32;
     *attenuation = Vec3::new(1.0, 1.0, 1.0);
-
-    let mut refracted = Vec3::zero();
-    // let reflect_prob: f32 = 0.0;
-    // let cosine: f32 = 0.0;
+    let mut refracted = Vec3::new(0.0, 0.0, 0.0);
+    let reflect_prob: f32;
+    let cosine: f32;
     if r_in.direction().dot(rec.normal) > 0.0 {
       outward_normal = rec.normal.scalar_mul(-1.0);
       ni_over_nt = self.ref_idx;
-      // cosine = ref_idx * r_in.direction().dot(rec.normal) / r_in.direction().length();
+      cosine = self.ref_idx * r_in.direction().dot(rec.normal) / r_in.direction().length();
     } else {
       outward_normal = rec.normal;
       ni_over_nt = 1.0 / self.ref_idx;
-      // cosine = -r_in.direction().dot(rec.normal) / r_in.direction().length();
+      cosine = -r_in.direction().dot(rec.normal) / r_in.direction().length();
     }
-
     if refract(r_in.direction(), outward_normal, ni_over_nt, &mut refracted) {
-      *scattered = Ray::new(rec.p, refracted);
+      reflect_prob = schlick(cosine, self.ref_idx);
+    } else {
+      *scattered = Ray::new(rec.p, reflected);
+      reflect_prob = 1.0;
+    }
+    if rand::random::<f32>() < reflect_prob {
+      *scattered = Ray::new(rec.p, reflected);
     } else {
       *scattered = Ray::new(rec.p, refracted);
-      return false;
     }
-    return true;
+    true
   }
 }
