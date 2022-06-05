@@ -12,22 +12,22 @@ pub struct Camera {
 
 impl Camera {
   pub fn default() -> Camera {
-    return Camera {
+    Camera {
       lower_left_corner: Vec3::new(-2.0, -1.0, -1.0),
       horizontal: Vec3::new(4.0, 0.0, 0.0),
       vertical: Vec3::new(0.0, 2.0, 0.0),
       origin: Vec3::new(0.0, 0.0, 0.0),
-    };
+    }
   }
 
   pub fn get_ray(self, u: f32, v: f32) -> Ray {
-    return Ray {
+    Ray {
       a: self.origin,
       b: self
         .lower_left_corner
         .add(self.horizontal.scalar_mul(u))
         .add(self.vertical.scalar_mul(v))
         .sub(self.origin),
-    };
+    }
   }
 }

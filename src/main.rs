@@ -8,25 +8,23 @@ mod vec3;
 use camera::Camera;
 use hit_record::Hitable;
 use hitable_list::HitableList;
+use ray::Ray;
 use vec3::Vec3;
 
 fn color<T: Hitable>(r: ray::Ray, world: &T) -> vec3::Vec3 {
   let mut rec = hit_record::HitRecord::empty();
 
   if world.hit(r, 0.0, f32::MAX, &mut rec) {
-    return Vec3::new(
-      rec.normal.e0 + 1.0,
-      rec.normal.e1 + 1.0,
-      rec.normal.e2 + 1.0,
-    )
-    .scalar_mul(0.5);
+    let target = rec.p.add(rec.normal).add(Vec3::random_in_unit_sphere());
+    return color(Ray::new(rec.p, target.sub(rec.p)), world).scalar_mul(0.5);
   }
 
   let unit_direction = r.direction().unit_vector();
   let t = (unit_direction.e1 + 1.0) * 0.5;
-  return Vec3::new(1.0, 1.0, 1.0)
+
+  Vec3::new(1.0, 1.0, 1.0)
     .scalar_mul(1.0 - t)
-    .add(Vec3::new(0.5, 0.7, 1.0).scalar_mul(t));
+    .add(Vec3::new(0.5, 0.7, 1.0).scalar_mul(t))
 }
 
 fn main() {
@@ -58,7 +56,6 @@ fn main() {
         let v = (j as f32 + rand::random::<f32>()) / ny as f32;
 
         let r = cam.get_ray(u, v);
-        // let p = r.point_at_parameter(2.0);
         col = col.add(color(r, &mut world));
       }
 

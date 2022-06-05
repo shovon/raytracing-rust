@@ -16,6 +16,6 @@ impl crate::hit_record::Hitable for HitableList {
         *rec = temp_rec;
       }
     }
-    return hit_anything;
+    hit_anything
   }
 }

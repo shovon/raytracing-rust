@@ -9,11 +9,11 @@ pub struct HitRecord {
 
 impl HitRecord {
   pub fn empty() -> HitRecord {
-    return HitRecord {
+    HitRecord {
       t: 0.0,
       p: Vec3::zero(),
       normal: Vec3::zero(),
-    };
+    }
   }
 }
 
