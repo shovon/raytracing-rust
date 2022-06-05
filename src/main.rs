@@ -57,42 +57,58 @@ fn main() {
 
   let mut list: Vec<Box<dyn crate::hit_record::Hitable>> = Vec::new();
 
+  // list.push(Box::new(sphere::Sphere::new(
+  //   Vec3::new(0.0, 0.0, -1.0),
+  //   0.5,
+  //   MaterialType::LambertianMat(Lambertian {
+  //     albedo: Vec3::new(0.8, 0.3, 0.3),
+  //   }),
+  // )));
+  // list.push(Box::new(sphere::Sphere::new(
+  //   Vec3::new(0.0, -100.5, -1.0),
+  //   100.0,
+  //   MaterialType::LambertianMat(Lambertian {
+  //     albedo: Vec3::new(0.8, 0.8, 0.0),
+  //   }),
+  // )));
+  // list.push(Box::new(sphere::Sphere::new(
+  //   Vec3::new(1.0, 0.0, -1.0),
+  //   0.5,
+  //   MaterialType::MetalMat(Metal {
+  //     albedo: Vec3::new(0.8, 0.6, 0.2),
+  //     fuzz: 0.3,
+  //   }),
+  // )));
+  // list.push(Box::new(sphere::Sphere::new(
+  //   Vec3::new(-1.0, 0.0, -1.0),
+  //   0.5,
+  //   MaterialType::DialectricMat(Dialectric { ref_idx: 1.5 }),
+  // )));
+  // list.push(Box::new(sphere::Sphere::new(
+  //   Vec3::new(-1.0, 0.0, -1.0),
+  //   -0.45,
+  //   MaterialType::DialectricMat(Dialectric { ref_idx: 1.5 }),
+  // )));
+
+  let r = std::f32::consts::PI / 4.0;
   list.push(Box::new(sphere::Sphere::new(
-    Vec3::new(0.0, 0.0, -1.0),
-    0.5,
+    Vec3::new(-r, 0.0, -1.0),
+    r,
     MaterialType::LambertianMat(Lambertian {
-      albedo: Vec3::new(0.8, 0.3, 0.3),
+      albedo: Vec3::new(0.0, 0.0, 1.0),
     }),
   )));
   list.push(Box::new(sphere::Sphere::new(
-    Vec3::new(0.0, -100.5, -1.0),
-    100.0,
+    Vec3::new(r, 0.0, -1.0),
+    r,
     MaterialType::LambertianMat(Lambertian {
-      albedo: Vec3::new(0.8, 0.8, 0.0),
+      albedo: Vec3::new(1.0, 0.0, 0.0),
     }),
-  )));
-  list.push(Box::new(sphere::Sphere::new(
-    Vec3::new(1.0, 0.0, -1.0),
-    0.5,
-    MaterialType::MetalMat(Metal {
-      albedo: Vec3::new(0.8, 0.6, 0.2),
-      fuzz: 0.3,
-    }),
-  )));
-  list.push(Box::new(sphere::Sphere::new(
-    Vec3::new(-1.0, 0.0, -1.0),
-    0.5,
-    MaterialType::DialectricMat(Dialectric { ref_idx: 1.5 }),
-  )));
-  list.push(Box::new(sphere::Sphere::new(
-    Vec3::new(-1.0, 0.0, -1.0),
-    -0.45,
-    MaterialType::DialectricMat(Dialectric { ref_idx: 1.5 }),
   )));
 
   let mut world = HitableList { list: list };
 
-  let cam = Camera::default();
+  let cam = Camera::new(90.0, (nx as f32) / (ny as f32));
 
   for j in (0..ny).rev() {
     for i in 0..nx {
