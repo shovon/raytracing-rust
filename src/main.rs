@@ -60,6 +60,7 @@ fn main() {
       }
 
       col = col.scalar_div(ns as f32);
+      col = Vec3::new(col.e0.sqrt(), col.e1.sqrt(), col.e2.sqrt());
 
       let ir = (255.99 * col.e0) as i16;
       let ig = (255.99 * col.e1) as i16;
