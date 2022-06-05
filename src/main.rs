@@ -14,7 +14,7 @@ use vec3::Vec3;
 fn color<T: Hitable>(r: ray::Ray, world: &T) -> vec3::Vec3 {
   let mut rec = hit_record::HitRecord::empty();
 
-  if world.hit(r, 0.0, f32::MAX, &mut rec) {
+  if world.hit(r, 0.001, f32::MAX, &mut rec) {
     let target = rec.p.add(rec.normal).add(Vec3::random_in_unit_sphere());
     return color(Ray::new(rec.p, target.sub(rec.p)), world).scalar_mul(0.5);
   }
@@ -28,8 +28,8 @@ fn color<T: Hitable>(r: ray::Ray, world: &T) -> vec3::Vec3 {
 }
 
 fn main() {
-  let nx = 200;
-  let ny = 100;
+  let nx = 800;
+  let ny = 400;
   let ns = 100;
   println!("P3");
   println!("{0} {1}", nx, ny);
