@@ -10,6 +10,7 @@ use vec3::Vec3;
 
 fn color<T: Hitable>(r: ray::Ray, world: &T) -> vec3::Vec3 {
   let mut rec = hit_record::HitRecord::empty();
+
   if world.hit(r, 0.0, f32::MAX, &mut rec) {
     return Vec3::new(
       rec.normal.e0 + 1.0,
