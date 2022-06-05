@@ -1,18 +1,21 @@
 use crate::hit_record::HitRecord;
 use crate::hit_record::Hitable;
+use crate::material::MaterialType;
 use crate::ray::Ray;
 use crate::vec3::Vec3;
 
 pub struct Sphere {
   pub center: Vec3,
   pub radius: f32,
+  pub material: MaterialType,
 }
 
 impl Sphere {
-  pub fn new(center: Vec3, radius: f32) -> Sphere {
+  pub fn new(center: Vec3, radius: f32, material: MaterialType) -> Sphere {
     return Sphere {
       center: center,
       radius: radius,
+      material: material,
     };
   }
 }
@@ -30,6 +33,7 @@ impl Hitable for Sphere {
         rec.t = temp;
         rec.p = r.point_at_parameter(rec.t);
         rec.normal = (rec.p.sub(self.center)).scalar_div(self.radius);
+        rec.material = self.material.clone();
         return true;
       }
       temp = (-b + (b * b - a * c).sqrt()) / a;
@@ -37,6 +41,7 @@ impl Hitable for Sphere {
         rec.t = temp;
         rec.p = r.point_at_parameter(rec.t);
         rec.normal = (rec.p.sub(self.center)).scalar_div(self.radius);
+        rec.material = self.material.clone();
         return true;
       }
     }

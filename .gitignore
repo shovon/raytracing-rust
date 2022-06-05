@@ -1,4 +1,4 @@
 main
 output.ppm
 target
-.gitignore
+.DS_Store
