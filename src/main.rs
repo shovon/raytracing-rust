@@ -1,9 +1,11 @@
+mod camera;
 mod hit_record;
 mod hitable_list;
 mod ray;
 mod sphere;
 mod vec3;
 
+use camera::Camera;
 use hit_record::Hitable;
 use hitable_list::HitableList;
 use vec3::Vec3;
@@ -30,30 +32,10 @@ fn color<T: Hitable>(r: ray::Ray, world: &T) -> vec3::Vec3 {
 fn main() {
   let nx = 200;
   let ny = 100;
+  let ns = 100;
   println!("P3");
   println!("{0} {1}", nx, ny);
   println!("255\n");
-
-  let lower_left_corner = vec3::Vec3 {
-    e0: -2.0,
-    e1: -1.0,
-    e2: -1.0,
-  };
-  let horizontal = vec3::Vec3 {
-    e0: 4.0,
-    e1: 0.0,
-    e2: 0.0,
-  };
-  let vertical = vec3::Vec3 {
-    e0: 0.0,
-    e1: 2.0,
-    e2: 0.0,
-  };
-  let origin = vec3::Vec3 {
-    e0: 0.0,
-    e1: 0.0,
-    e2: 0.0,
-  };
 
   let mut list: Vec<Box<dyn crate::hit_record::Hitable>> = Vec::new();
   list.push(Box::new(sphere::Sphere::new(
@@ -65,18 +47,22 @@ fn main() {
     100.0,
   )));
   let mut world = HitableList { list: list };
+
+  let cam = Camera::default();
+
   for j in (0..ny).rev() {
     for i in 0..nx {
-      let u = (i as f32) / (nx as f32);
-      let v = (j as f32) / (ny as f32);
+      let mut col = Vec3::zero();
+      for _ in 0..ns {
+        let u = (i as f32 + rand::random::<f32>()) / nx as f32;
+        let v = (j as f32 + rand::random::<f32>()) / ny as f32;
 
-      let r = ray::Ray {
-        a: origin,
-        b: lower_left_corner
-          .add(horizontal.scalar_mul(u))
-          .add(vertical.scalar_mul(v)),
-      };
-      let col = color(r, &mut world);
+        let r = cam.get_ray(u, v);
+        // let p = r.point_at_parameter(2.0);
+        col = col.add(color(r, &mut world));
+      }
+
+      col = col.scalar_div(ns as f32);
 
       let ir = (255.99 * col.e0) as i16;
       let ig = (255.99 * col.e1) as i16;
