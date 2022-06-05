@@ -6,6 +6,22 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
+  pub fn new(x: f32, y: f32, z: f32) -> Vec3 {
+    return Vec3 {
+      e0: x,
+      e1: y,
+      e2: z,
+    };
+  }
+
+  pub fn zero() -> Vec3 {
+    return Vec3 {
+      e0: 0.0,
+      e1: 0.0,
+      e2: 0.0,
+    };
+  }
+
   pub fn add(self, v: Vec3) -> Vec3 {
     return Vec3 {
       e0: self.e0 + v.e0,
@@ -42,7 +58,7 @@ impl Vec3 {
     return Vec3 {
       e0: self.e1 * v.e2 - self.e2 * v.e1,
       e1: -(self.e0 * v.e2 - self.e2 * v.e0),
-      e2: self.e0 * v.e1 - self.e1 * v.e0
+      e2: self.e0 * v.e1 - self.e1 * v.e0,
     };
   }
 
